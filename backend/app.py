@@ -186,6 +186,8 @@ def create_app(test_config: dict | None = None) -> Flask:
         text = str(body().get("text", "")).strip()
         if not 10 <= len(text) <= 4000:
             return jsonify(ok=False, error="invalid", field="text", message="Please write 10 to 4,000 characters."), 400
+        if "[Add your reason here" in text:     # the draft from llm.appeal_draft, sent unchanged
+            return jsonify(ok=False, error="invalid", field="text", message="Replace the line in [brackets] with your reason."), 400
         if row["final_decision"] == "approved":
             return jsonify(ok=False, error="approved", message="This application is already approved."), 409
         db = get_db()

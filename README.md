@@ -17,18 +17,35 @@ Then open http://localhost:8000. The first run creates the database, the encrypt
 
 **Demo accounts (local only):**
 
-| Role | Email | Password | Second step |
+| Role | Tab on the sign-in page | Email | Password |
 |---|---|---|---|
-| Applicant | `demo@clearloan.test` | `ClearLoan-Demo-2026` | — |
-| Bank staff | `auditor@clearloan.test` | `ClearLoan-Staff-2026` | 6-digit code: `python -m backend totp auditor@clearloan.test`, or add the secret from `backend/seed.py` to any authenticator app |
+| Applicant | Applicant | `demo@clearloan.test` | `ClearLoan-Demo-2026` |
+| Bank staff | Bank staff | `auditor@clearloan.test` | `ClearLoan-Staff-2026` + a 6-digit code |
 
 Applicants can also create their own account from the sign-in page.
+
+**Signing in as bank staff.** Staff accounts use two-factor sign-in, so the form also asks for a 6-digit code. The `123 456` shown in the field is only an example. To get the real code:
+
+1. Fill in the email and password first: the code changes every 30 seconds.
+2. In a terminal, in the project folder, run the command below. Wait 2 to 3 seconds, do not press Ctrl+C.
+   ```bash
+   .venv\Scripts\python.exe -m backend totp auditor@clearloan.test    # macOS / Linux: .venv/bin/python
+   ```
+3. Type the 6 digits it prints and sign in right away. If the code is refused, run the command again for a new one.
+
+Easier for a demo: add the key `JBSWY3DPEHPK3PXPJBSWY3DPEHPK3PXP` (`DEMO_TOTP_SECRET` in `backend/seed.py`) to Google Authenticator or Microsoft Authenticator ("Enter a setup key", time based). The phone then always shows the current code.
+
+After 5 wrong tries the account is locked for 10 minutes. To unlock it at once: `python -m backend unlock auditor@clearloan.test`.
+
+To be signed in to both accounts at the same time, open the second one in a private window. In the same window, a new sign-in replaces the first one.
 
 Other commands:
 
 ```bash
 python -m backend seed --samples 100              # more demo data
+python -m backend unlock EMAIL                    # clear failed sign-ins and the 10-minute lock
 python -m backend add-staff jane@bank.ae "Jane"    # real staff account, prints the authenticator link
+python -m backend run --host 0.0.0.0 --port 8000  # reachable from other machines (or set CLEARLOAN_HOST / CLEARLOAN_PORT)
 python -m pytest backend/tests                    # back-end tests (pip install -r requirements-dev.txt)
 ```
 
@@ -157,7 +174,7 @@ Rules: `identity` never goes to the model or the LLM. `display_name` is the firs
 - Passwords hashed with scrypt; wrong email and wrong password take the same time and give the same answer.
 - Lockout after 5 failures for 10 minutes, counted per email (also for unknown emails, so accounts can't be discovered).
 - Staff need a TOTP code (RFC 6238). Sessions: HttpOnly, SameSite=Strict cookie, new session on sign-in, 15 minutes of inactivity (checked by the server).
-- Identity encrypted at rest; only the gateway can read it. The prompt is scanned before every LLM call.
+- Identity encrypted at rest (Fernet); only the gateway can read it. Kept in clear: the first name (to greet the applicant) and a masked copy (`Ahmed K•••`). The prompt is scanned before every LLM call.
 - Strict Content Security Policy (scripts from this server only), `X-Frame-Options: DENY`, `no-referrer`, `no-store` on API answers.
 - Only the HTML pages and `assets/` are served; the back-end source and `instance/` keys are not.
 - All dynamic text is escaped before display (`CL.esc`) to block XSS. Raw identity is never stored in the browser.

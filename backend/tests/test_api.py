@@ -93,6 +93,8 @@ def test_full_applicant_flow_and_privacy(app):
     assert p["model_input"]["applicant"] == d["token"]
     assert "sex" not in p["model_input"]
 
+    # The draft sent unchanged is refused: the applicant must write a reason
+    assert c.post(f"/api/appeal/{d['application_id']}", json={"text": d["llm"]["appeal_draft"]}, headers=H).status_code == 400
     a = c.post(f"/api/appeal/{d['application_id']}", json={"text": "Ahmed here, I have a new job. Call +971 50 123 4567"}, headers=H).get_json()
     assert a["ok"] and a["ticket"].startswith("RV-")
     assert c.post(f"/api/appeal/{d['application_id']}", json={"text": "again please, thanks"}, headers=H).status_code == 409

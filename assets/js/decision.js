@@ -164,6 +164,7 @@
     $('appeal-btn').addEventListener('click', async () => {
       const btn = $('appeal-btn');
       if (ta.value.trim().length < 10) { CL.fieldError(ta, 'Please write at least 10 characters.'); return ta.focus(); }
+      if (ta.value.includes('[Add your reason here')) { CL.fieldError(ta, 'Replace the line in [brackets] with your reason.'); return ta.focus(); }
       CL.clearFieldError(ta);
       CL.busy(btn, true);
       try {
