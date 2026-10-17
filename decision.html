@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ClearLoan – Decision</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;600&family=Noto+Sans+Devanagari:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css?v=2">
+<script src="assets/js/theme.js?v=2"></script>
+</head>
+<body>
+<header id="site-header"></header>
+
+<main>
+  <div class="page-head">
+    <div>
+      <p class="eyebrow">Your decision</p>
+      <h1 class="page-title">Your decision</h1>
+      <p class="meta" id="meta"></p>
+    </div>
+    <div class="actions">
+      <button type="button" class="btn btn-secondary btn-sm hidden" id="print-btn"><i data-icon="printer"></i>Print</button>
+      <a class="btn btn-secondary btn-sm" href="apply.html"><i data-icon="plus"></i>New application</a>
+    </div>
+  </div>
+  <ol id="stepper"></ol>
+
+  <div id="loading" aria-hidden="true">
+    <div class="skeleton sk-card mb" style="height:170px"></div>
+    <div class="row"><div class="skeleton sk-card col" style="height:240px"></div><div class="skeleton sk-card col" style="height:240px"></div></div>
+  </div>
+
+  <div id="empty" class="card empty-state hidden">
+    <span class="tile-icon"><i data-icon="file"></i></span>
+    <h2 id="empty-title">No application yet</h2>
+    <p id="empty-text">Fill in the form first to get your decision.</p>
+    <a class="btn btn-primary mt" href="apply.html">Apply now <i data-icon="arrow"></i></a>
+  </div>
+
+  <div id="content" class="hidden">
+    <div id="review-banner" class="banner hidden" role="status"></div>
+    <section id="decision" class="decision reveal" aria-live="polite"></section>
+
+    <div class="row mb">
+      <section class="card col reveal">
+        <div class="card-head" style="margin-bottom:4px">
+          <div class="card-title"><span class="tile-icon info"><i data-icon="chart"></i></span><h2>Main reasons</h2></div>
+        </div>
+        <p class="sub">From the risk model, ranked by how much they moved the score.</p>
+        <ol class="reasons" id="reasons"></ol>
+      </section>
+
+      <section class="card col reveal">
+        <div class="card-head">
+          <div class="card-title"><span class="tile-icon"><i data-icon="globe"></i></span><h2>Explained in your language</h2></div>
+          <div class="tabs hidden" role="group" aria-label="Explanation language" id="lang-tabs">
+            <button type="button" data-view="local" aria-pressed="true" id="tab-local"></button>
+            <button type="button" data-view="en" aria-pressed="false">English</button>
+          </div>
+        </div>
+        <p class="explanation" id="explanation"></p>
+        <div class="note">
+          <i data-icon="lock"></i>
+          <span id="engine-note"></span>
+        </div>
+      </section>
+    </div>
+
+    <div class="row">
+      <section class="card col reveal">
+        <div class="card-head">
+          <div class="card-title"><span class="tile-icon"><i data-icon="up"></i></span><h2 id="steps-title">How to improve your chances</h2></div>
+        </div>
+        <ol class="steps" id="steps"></ol>
+      </section>
+
+      <section class="card col reveal" id="appeal-card">
+        <div id="appeal-form">
+          <div class="card-head" style="margin-bottom:6px">
+            <div class="card-title"><span class="tile-icon warn"><i data-icon="users"></i></span><h2>Disagree? Ask a person to review</h2></div>
+          </div>
+          <p class="muted" style="margin:0 0 14px">A credit officer will check your file. We wrote a draft for you to edit:</p>
+          <label for="appeal-text" class="visually-hidden">Your review request</label>
+          <textarea id="appeal-text" maxlength="4000"></textarea>
+          <p class="hint" id="appeal-count"></p>
+          <div class="actions" style="margin-top:14px">
+            <button type="button" class="btn btn-primary" id="appeal-btn"><i data-icon="inbox"></i>Send for human review</button>
+          </div>
+        </div>
+        <div id="appeal-status" class="hidden">
+          <div class="card-head">
+            <div class="card-title"><span class="tile-icon info"><i data-icon="users"></i></span><h2>Human review</h2></div>
+            <span class="chip chip-outline mono" id="appeal-ticket"></span>
+          </div>
+          <ol class="timeline" id="appeal-timeline"></ol>
+        </div>
+      </section>
+    </div>
+  </div>
+</main>
+
+<script src="assets/js/config.js?v=2"></script>
+<script src="assets/js/mock.js?v=2"></script>
+<script src="assets/js/api.js?v=2"></script>
+<script src="assets/js/common.js?v=2"></script>
+<script src="assets/js/decision.js?v=2"></script>
+</body>
+</html>

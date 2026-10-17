@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ClearLoan – Review queue</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css?v=2">
+<script src="assets/js/theme.js?v=2"></script>
+</head>
+<body>
+<header id="site-header"></header>
+
+<main>
+  <div class="page-head">
+    <div>
+      <p class="eyebrow">Bank staff · Human review</p>
+      <h1 class="page-title">Review queue</h1>
+      <p class="lead">Applicants who disagree with the model ask a person to look again. Names and contact details are removed from their messages.</p>
+    </div>
+    <div class="tabs" role="group" aria-label="Filter reviews" id="filters">
+      <button type="button" data-filter="open" aria-pressed="true">Open <span class="chip chip-gray" id="n-open">0</span></button>
+      <button type="button" data-filter="closed" aria-pressed="false">Closed <span class="chip chip-gray" id="n-closed">0</span></button>
+    </div>
+  </div>
+
+  <div id="loading" aria-hidden="true" class="stack">
+    <div class="skeleton sk-card" style="height:220px"></div><div class="skeleton sk-card" style="height:220px"></div>
+  </div>
+  <div id="list" class="stack" aria-live="polite"></div>
+</main>
+
+<script src="assets/js/config.js?v=2"></script>
+<script src="assets/js/mock.js?v=2"></script>
+<script src="assets/js/api.js?v=2"></script>
+<script src="assets/js/common.js?v=2"></script>
+<script src="assets/js/reviews.js?v=2"></script>
+</body>
+</html>

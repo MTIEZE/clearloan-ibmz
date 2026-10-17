@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ClearLoan – Apply</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css?v=2">
+<script src="assets/js/theme.js?v=2"></script>
+</head>
+<body>
+<header id="site-header"></header>
+
+<main>
+  <div class="page-head">
+    <div>
+      <p class="eyebrow">Your application</p>
+      <h1 class="page-title">Apply for a loan</h1>
+      <p class="lead">Get a clear and fair decision in seconds, explained in your own language.</p>
+    </div>
+  </div>
+  <ol id="stepper"></ol>
+
+  <div class="row">
+    <form id="apply-form" class="col-main stack" novalidate aria-label="Loan application">
+
+      <section class="card reveal">
+        <div class="card-head">
+          <div class="card-title"><span class="tile-icon"><i data-icon="user"></i></span><h2>1. About you</h2></div>
+          <span class="chip chip-teal"><i data-icon="lock"></i>Encrypted · never sent to the AI</span>
+        </div>
+        <div class="fields">
+          <div class="field"><label for="name">Full name<span class="req" aria-hidden="true">*</span></label><input id="name" type="text" autocomplete="name" placeholder="Ahmed Khan" required maxlength="100"></div>
+          <div class="field"><label for="id_number">Emirates ID or passport number<span class="req" aria-hidden="true">*</span></label><input id="id_number" type="text" autocomplete="off" placeholder="784-XXXX-XXXXXXX-X" required maxlength="30"></div>
+          <div class="field"><label for="phone">Phone number<span class="req" aria-hidden="true">*</span></label><input id="phone" type="tel" autocomplete="tel" placeholder="+971 50 000 0000" required maxlength="25"></div>
+          <div class="field"><label for="email">Email<span class="req" aria-hidden="true">*</span></label><input id="email" type="email" autocomplete="email" placeholder="name@example.com" required maxlength="254"></div>
+        </div>
+      </section>
+
+      <section class="card reveal">
+        <div class="card-head">
+          <div class="card-title"><span class="tile-icon info"><i data-icon="wallet"></i></span><h2>2. Your finances</h2></div>
+          <span class="chip chip-blue"><i data-icon="chart"></i>Used by the risk model</span>
+        </div>
+        <div class="fields">
+          <div class="field"><label for="loan_amount">Loan amount<span class="req" aria-hidden="true">*</span></label>
+            <div class="input-affix"><span class="prefix">AED</span><input id="loan_amount" type="number" min="1000" step="500" inputmode="numeric" placeholder="50000" required></div></div>
+          <div class="field"><label for="avg_bill">Average monthly bills<span class="req" aria-hidden="true">*</span></label>
+            <div class="input-affix"><span class="prefix">AED</span><input id="avg_bill" type="number" min="0" step="50" inputmode="numeric" placeholder="3200" required></div>
+            <p class="hint">Rent, cards, utilities, other loans.</p></div>
+          <div class="field"><label for="avg_payment">Average monthly payments<span class="req" aria-hidden="true">*</span></label>
+            <div class="input-affix"><span class="prefix">AED</span><input id="avg_payment" type="number" min="0" step="50" inputmode="numeric" placeholder="600" required></div>
+            <p class="hint">What you actually pay back each month.</p></div>
+          <div class="field"><label for="age">Age<span class="req" aria-hidden="true">*</span></label><input id="age" type="number" min="18" max="100" inputmode="numeric" placeholder="24" required></div>
+          <div class="field"><label for="education">Education</label>
+            <select id="education"><option value="university">University</option><option value="graduate_school">Graduate school</option><option value="high_school">High school</option><option value="other">Other</option></select></div>
+          <div class="field"><label for="marriage">Marital status</label>
+            <select id="marriage"><option value="single">Single</option><option value="married">Married</option><option value="other">Other</option></select></div>
+        </div>
+
+        <fieldset style="margin-top:26px">
+          <legend>Credit history</legend>
+          <div class="choice-grid">
+            <label class="radio-card" for="h-no"><input id="h-no" type="radio" name="history" value="no" checked><span><strong>This is my first loan</strong><span class="d">We use our first-time borrower model. No history needed.</span></span></label>
+            <label class="radio-card" for="h-yes"><input id="h-yes" type="radio" name="history" value="yes"><span><strong>I have a credit history</strong><span class="d">We use the full model, with your last 6 months of payments.</span></span></label>
+          </div>
+        </fieldset>
+
+        <div class="history-box" id="history-box">
+          <p class="small" style="margin:0 0 10px;font-weight:600;color:var(--muted)">Repayment record, last 6 months <span id="history-hint" style="font-weight:400">(skipped for first-time borrowers)</span></p>
+          <div class="fields" id="history-fields"></div>
+        </div>
+      </section>
+
+      <section class="card reveal">
+        <div class="card-head">
+          <div class="card-title"><span class="tile-icon warn"><i data-icon="scale"></i></span><h2>3. Fairness check</h2></div>
+          <span class="chip chip-orange"><i data-icon="eyeOff"></i>Not used for the decision</span>
+        </div>
+        <p class="muted" style="margin:0 0 16px">We only use this to check that our AI treats men and women equally. It never reaches the risk model or the AI.</p>
+        <div style="max-width:320px"><label for="sex">Sex</label>
+          <select id="sex"><option value="male">Male</option><option value="female">Female</option><option value="undisclosed" selected>Prefer not to say</option></select></div>
+      </section>
+
+      <section class="card reveal">
+        <div class="card-head" style="margin-bottom:6px">
+          <div class="card-title"><span class="tile-icon"><i data-icon="globe"></i></span><h2>4. Your language</h2></div>
+        </div>
+        <p class="muted" style="margin:0 0 14px">We explain the decision in the language you choose.</p>
+        <div class="pills" role="group" aria-label="Explanation language" id="lang-pills" style="margin-bottom:24px">
+          <button type="button" data-lang="en" aria-pressed="true">English</button>
+          <button type="button" data-lang="ar" lang="ar" aria-pressed="false">العربية</button>
+          <button type="button" data-lang="ur" lang="ur" aria-pressed="false">اردو</button>
+          <button type="button" data-lang="hi" lang="hi" aria-pressed="false">हिन्दी</button>
+          <button type="button" data-lang="fr" lang="fr" aria-pressed="false">Français</button>
+        </div>
+        <label class="check" for="consent"><input id="consent" type="checkbox" required><span>I agree that ClearLoan uses my data on its secure server to make this decision.</span></label>
+        <p id="form-error" class="error-text hidden" role="alert" style="margin-top:16px"></p>
+        <div class="actions" style="margin-top:24px">
+          <button id="submit-btn" class="btn btn-primary" type="submit">Get my decision <i data-icon="arrow"></i></button>
+          <span class="small muted">Answer in about a second. You can always ask a person to review it.</span>
+        </div>
+      </section>
+    </form>
+
+    <aside class="col-side stack sticky-side" style="gap:16px">
+      <section class="card dark" aria-labelledby="qc-title">
+        <div class="card-head" style="margin-bottom:10px">
+          <div class="card-title"><span class="tile-icon light"><i data-icon="gauge"></i></span><h2 id="qc-title" style="font-size:17px">Quick check</h2></div>
+        </div>
+        <p class="small" id="qc-empty">Fill in your bills and payments to see what weighs most in the decision.</p>
+        <div id="qc" class="hidden" aria-live="polite">
+          <div class="qc-row"><span>Payments cover</span><span>35% helps</span></div>
+          <p class="qc-value" id="qc-ratio">0%</p>
+          <div class="meter" aria-hidden="true"><div class="fill" id="qc-fill"></div><div class="mark" style="left:35%"></div></div>
+          <p class="small" id="qc-text"></p>
+          <hr class="divider" style="background:rgba(255,255,255,.1);margin:14px 0">
+          <div class="qc-row"><span>Loan size</span><span id="qc-months"></span></div>
+        </div>
+        <p class="xsmall" style="margin-top:14px;opacity:.75">Indicative only: the decision is made by the risk model on the server.</p>
+      </section>
+
+      <section class="card">
+        <h2 style="font-size:17px;margin-bottom:16px">How ClearLoan protects you</h2>
+        <ol class="steps small">
+          <li><span><strong>Your identity is hidden.</strong> Your name and ID are encrypted and replaced by a code like <code>Applicant_7F3A2B</code> before any AI sees your file.</span></li>
+          <li><span><strong>Our AI is checked for fairness.</strong> We measure if men and women, young and old, get equal chances.</span></li>
+          <li><span><strong>Every decision is explained.</strong> In your language, with steps to improve, and a person can always review it.</span></li>
+        </ol>
+      </section>
+
+      <section class="card hidden" id="history-card">
+        <div class="card-head" style="margin-bottom:6px">
+          <div class="card-title"><span class="tile-icon info"><i data-icon="history"></i></span><h2 style="font-size:17px">Your applications</h2></div>
+        </div>
+        <ul class="list" id="history-list"></ul>
+      </section>
+    </aside>
+  </div>
+</main>
+
+<script src="assets/js/config.js?v=2"></script>
+<script src="assets/js/mock.js?v=2"></script>
+<script src="assets/js/api.js?v=2"></script>
+<script src="assets/js/common.js?v=2"></script>
+<script src="assets/js/apply.js?v=2"></script>
+</body>
+</html>

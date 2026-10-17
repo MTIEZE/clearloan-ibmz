@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="ClearLoan: private, fair and explainable loan decisions.">
+<title>ClearLoan – Sign in</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css?v=2">
+<script src="assets/js/theme.js?v=2"></script>
+</head>
+<body>
+<header id="site-header"></header>
+
+<main>
+  <div class="row stretch mb">
+    <section class="hero reveal">
+      <p class="eyebrow"><i data-icon="shield"></i>Private · Fair · Explainable</p>
+      <h1>Clear loan decisions, without exposing who you are.</h1>
+      <p>Apply in minutes, understand every decision in your own language, and ask a person to review it at any time.</p>
+      <ul>
+        <li><i data-icon="key"></i><span>Passwords are stored hashed, never in plain text.</span></li>
+        <li><i data-icon="clock"></i><span>Sessions end after 15 minutes without activity.</span></li>
+        <li><i data-icon="lock"></i><span>After 5 wrong passwords, the account is locked for 10 minutes.</span></li>
+        <li><i data-icon="list"></i><span>Every sign-in is written to the audit log.</span></li>
+      </ul>
+    </section>
+
+    <section class="login-card reveal" aria-labelledby="signin-title">
+      <h2 id="signin-title">Sign in</h2>
+      <p class="muted" id="signin-sub" style="margin:0 0 20px">Choose who you are.</p>
+      <div class="segmented" role="group" aria-label="Account type" style="margin-bottom:24px" id="role-switch">
+        <button type="button" data-role="applicant" aria-pressed="true"><i data-icon="user"></i>Applicant</button>
+        <button type="button" data-role="staff" aria-pressed="false"><i data-icon="users"></i>Bank staff</button>
+      </div>
+
+      <p id="session-note" class="banner hidden" role="status" style="margin-bottom:18px"><i data-icon="clock"></i><span>Your session ended after 15 minutes without activity. Please sign in again.</span></p>
+
+      <form id="login-form" novalidate class="stack" style="gap:16px">
+        <div id="name-field" class="hidden">
+          <label for="display_name">First name</label>
+          <input id="display_name" type="text" autocomplete="given-name" placeholder="Sara" maxlength="40">
+          <p class="hint">Only your first name is shown in the app.</p>
+        </div>
+        <div>
+          <label for="email">Email</label>
+          <input id="email" type="email" autocomplete="username" placeholder="name@example.com" required>
+        </div>
+        <div>
+          <label for="password">Password</label>
+          <div class="input-affix has-toggle">
+            <input id="password" type="password" autocomplete="current-password" placeholder="At least 8 characters" required minlength="8">
+            <button type="button" class="toggle" id="pw-toggle" aria-label="Show password" aria-pressed="false"><i data-icon="eye"></i></button>
+          </div>
+        </div>
+        <div id="code-field" class="hidden">
+          <label for="code">6-digit code from your authenticator app</label>
+          <input id="code" type="text" inputmode="numeric" autocomplete="one-time-code" placeholder="123 456" maxlength="7" style="font-family:var(--mono);letter-spacing:.14em">
+          <p class="hint">Staff accounts need a second step (two-factor sign-in).</p>
+        </div>
+        <p id="login-error" class="error-text hidden" role="alert"></p>
+        <button id="login-btn" class="btn btn-primary btn-block" type="submit">Sign in</button>
+        <p id="login-foot" class="muted" style="margin:0;text-align:center"></p>
+      </form>
+      <p id="demo-hint" class="note demo-hint hidden"><i data-icon="info"></i><span>Local demo: test accounts are listed in <code>backend/seed.py</code> and in the README.</span></p>
+    </section>
+  </div>
+
+  <section class="card">
+    <div class="card-head" style="margin-bottom:6px">
+      <div class="card-title"><span class="tile-icon info"><i data-icon="users"></i></span><h2>Who can see what</h2></div>
+    </div>
+    <p class="sub">Access depends on your role. Nobody sees more than they need.</p>
+    <div class="table-wrap">
+      <table style="min-width:600px">
+        <thead><tr><th scope="col">Role</th><th scope="col">Can see</th><th scope="col">Cannot see</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Applicant</strong></td><td>Own applications, decisions, explanations, review requests</td><td class="muted">Other people's files, dashboards</td></tr>
+          <tr><td><strong>Bank staff (auditor)</strong></td><td>Fairness dashboard, review queue, audit log, prompt log</td><td class="muted">Names or contact details</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</main>
+
+<script src="assets/js/config.js?v=2"></script>
+<script src="assets/js/mock.js?v=2"></script>
+<script src="assets/js/api.js?v=2"></script>
+<script src="assets/js/common.js?v=2"></script>
+<script src="assets/js/login.js?v=2"></script>
+</body>
+</html>

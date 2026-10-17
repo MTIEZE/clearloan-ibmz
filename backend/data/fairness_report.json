@@ -1,0 +1,32 @@
+{
+  "source": "Offline evaluation from the training notebook (AI Fairness 360), test split",
+  "model": "full_history",
+  "metrics": {
+    "gap_sex_before": 9, "gap_sex_after": 2,
+    "ratio_age_before": 0.74, "ratio_age_after": 0.90, "ratio_target": 0.80,
+    "auc_before": 0.78, "auc_after": 0.77,
+    "latency_ms": 38, "latency_samples": 1000
+  },
+  "groups": {
+    "sex": [
+      { "label": "Men", "before": 64, "after": 66 },
+      { "label": "Women", "before": 73, "after": 68 }
+    ],
+    "age": [
+      { "label": "21 to 25", "before": 52, "after": 61 },
+      { "label": "26 to 35", "before": 70, "after": 68 },
+      { "label": "36 to 50", "before": 69, "after": 67 },
+      { "label": "51 and over", "before": 58, "after": 63 }
+    ]
+  },
+  "models": [
+    { "name": "A · Full history", "note": "people with a credit record", "auc": 0.77, "approval_rate": 67, "gap_sex": 2 },
+    { "name": "B · First-time borrower", "note": "no history needed", "auc": 0.66, "approval_rate": 59, "gap_sex": 3 }
+  ],
+  "method": {
+    "tool": "AI Fairness 360 (IBM, open source)",
+    "mitigation": "Reweighing the training data",
+    "groups": "Sex, age bands"
+  },
+  "dataset": "UCI “Default of Credit Card Clients”, 30,000 records"
+}

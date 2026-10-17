@@ -218,3 +218,33 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# ---------------------------------------------------------------
+# ClearLoan: local secrets and data, never commit
+# instance/ holds the Fernet data key, the Flask secret key and the SQLite database
+instance/
+.venv/
+*.sqlite3
+*.db
+*.pem
+*.key
+*.p12
+*.pfx
+id_rsa*
+id_ed25519*
+secrets/
+.env.*
+!.env.example
+
+# Jupyter config and runtime files (can contain the server token)
+.jupyter/
+jupyter_*config.py
+jupyter_*config.json
+
+# Local tools and OS files
+.claude/
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini

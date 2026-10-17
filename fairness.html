@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ClearLoan – Fairness dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css?v=2">
+<script src="assets/js/theme.js?v=2"></script>
+</head>
+<body>
+<header id="site-header"></header>
+
+<main>
+  <div class="page-head">
+    <div>
+      <p class="eyebrow">Bank staff · Fairness</p>
+      <h1 class="page-title">Fairness dashboard</h1>
+      <p class="lead">Does our AI give every group an equal chance? We measure it before and after mitigation, and keep watching live decisions.</p>
+    </div>
+  </div>
+
+  <h2 class="eyebrow" style="color:var(--muted)"><i data-icon="file"></i>Offline evaluation · training notebook</h2>
+  <div class="kpis" id="kpis" aria-live="polite">
+    <div class="skeleton sk-card"></div><div class="skeleton sk-card"></div><div class="skeleton sk-card"></div><div class="skeleton sk-card"></div>
+  </div>
+
+  <section class="card mb">
+    <div class="card-head" style="margin-bottom:6px">
+      <div class="card-title"><span class="tile-icon"><i data-icon="scale"></i></span><h2 id="group-title">Approval rate by sex</h2></div>
+      <div class="tabs" role="group" aria-label="Compare groups by">
+        <button type="button" data-group="sex" aria-pressed="true">Sex</button>
+        <button type="button" data-group="age" aria-pressed="false">Age band</button>
+      </div>
+    </div>
+    <p class="muted" style="margin:0 0 16px" id="group-note"></p>
+    <div class="legend"><span><i class="sw" style="background:var(--before)"></i>Before mitigation</span><span><i class="sw" style="background:var(--after)"></i>After mitigation</span></div>
+    <div id="groups"></div>
+    <p class="small muted" style="margin-top:10px">Approval rate = share of applicants the model would approve, on the test set.</p>
+  </section>
+
+  <div class="row mb">
+    <section class="card col-main">
+      <div class="card-head" style="margin-bottom:4px">
+        <div class="card-title"><span class="tile-icon info"><i data-icon="chart"></i></span><h2>Two models, compared</h2></div>
+      </div>
+      <p class="sub">Model B simulates first-time borrowers: the repayment history columns (PAY_0 to PAY_6) are removed.</p>
+      <div class="table-wrap"><table style="min-width:520px">
+        <thead><tr><th scope="col">Model</th><th scope="col" class="num">Accuracy (AUC)</th><th scope="col" class="num">Approval rate</th><th scope="col" class="num">Gap men / women</th></tr></thead>
+        <tbody id="models"></tbody>
+      </table></div>
+      <p class="muted" style="margin-top:14px">Model B is less sure: people with no history are harder to judge. That is why every decision is explained and can be reviewed by a person.</p>
+    </section>
+    <section class="card dark col-side">
+      <h2 style="font-size:17px;margin-bottom:18px">How we measure</h2>
+      <dl class="facts" id="method"></dl>
+    </section>
+  </div>
+
+  <h2 class="eyebrow" style="color:var(--muted);margin-top:12px"><i data-icon="refresh"></i>Live monitoring · decisions on this server</h2>
+  <div class="kpis" id="live-kpis"></div>
+  <div class="row mb">
+    <section class="card col">
+      <div class="card-head" style="margin-bottom:4px">
+        <div class="card-title"><span class="tile-icon"><i data-icon="users"></i></span><h2>Live approval rate by sex</h2></div>
+      </div>
+      <p class="sub" id="live-sex-note"></p>
+      <div class="mini-bars" id="live-sex"></div>
+    </section>
+    <section class="card col">
+      <div class="card-head" style="margin-bottom:4px">
+        <div class="card-title"><span class="tile-icon"><i data-icon="history"></i></span><h2>Live approval rate by age band</h2></div>
+      </div>
+      <p class="sub" id="live-age-note"></p>
+      <div class="mini-bars" id="live-age"></div>
+    </section>
+  </div>
+  <p id="live-warning" class="note hidden"><i data-icon="info"></i><span>Small sample: fewer than 30 live decisions. Treat live numbers as early signals only.</span></p>
+
+  <p class="small muted" style="margin-top:20px" id="dataset"></p>
+</main>
+
+<script src="assets/js/config.js?v=2"></script>
+<script src="assets/js/mock.js?v=2"></script>
+<script src="assets/js/api.js?v=2"></script>
+<script src="assets/js/common.js?v=2"></script>
+<script src="assets/js/fairness.js?v=2"></script>
+</body>
+</html>

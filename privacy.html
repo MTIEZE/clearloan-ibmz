@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ClearLoan – Privacy proof</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css?v=2">
+<script src="assets/js/theme.js?v=2"></script>
+</head>
+<body>
+<header id="site-header"></header>
+
+<main>
+  <div class="page-head">
+    <div>
+      <p class="eyebrow" id="eyebrow">Privacy proof</p>
+      <h1 class="page-title">What the AI saw, and what it didn't</h1>
+      <p class="lead" id="lead">This page shows the exact data each part of our system received.</p>
+    </div>
+  </div>
+  <ol id="stepper"></ol>
+
+  <div id="staff-tools" class="row mb hidden">
+    <form id="lookup" class="card col-side" style="display:flex;flex-direction:column;gap:12px">
+      <div class="card-title"><span class="tile-icon"><i data-icon="search"></i></span><h2>Find an application</h2></div>
+      <div><label for="app-id">Application ID</label><input id="app-id" type="text" placeholder="CL-7F3A2B" autocomplete="off" spellcheck="false" style="font-family:var(--mono)"></div>
+      <button class="btn btn-dark" type="submit"><i data-icon="list"></i>Show audit</button>
+    </form>
+    <section class="card col-main">
+      <div class="card-head" style="margin-bottom:8px">
+        <div class="card-title"><span class="tile-icon info"><i data-icon="history"></i></span><h2>Recent applications</h2></div>
+        <span class="chip chip-gray" id="recent-count"></span>
+      </div>
+      <div class="table-wrap" style="max-height:300px;overflow-y:auto"><table style="min-width:520px">
+        <thead><tr><th scope="col">ID</th><th scope="col">Code</th><th scope="col">Date</th><th scope="col" class="num">Risk</th><th scope="col">Decision</th></tr></thead>
+        <tbody id="recent"></tbody>
+      </table></div>
+    </section>
+  </div>
+
+  <div id="loading" class="hidden" aria-hidden="true">
+    <div class="skeleton sk-card mb"></div>
+    <div class="row"><div class="skeleton sk-card col" style="height:260px"></div><div class="skeleton sk-card col" style="height:260px"></div></div>
+  </div>
+
+  <div id="empty" class="card empty-state hidden">
+    <span class="tile-icon"><i data-icon="eye"></i></span>
+    <h2>Nothing to show yet</h2>
+    <p id="empty-text">Submit an application first.</p>
+  </div>
+
+  <div id="content" class="hidden">
+    <section class="card mb reveal" aria-label="Data flow">
+      <div class="card-head">
+        <div class="card-title"><span class="tile-icon"><i data-icon="shield"></i></span><h2>How your data moved · <span class="mono" id="flow-app" style="font-size:15px;font-weight:500"></span></h2></div>
+      </div>
+      <div class="flow">
+        <div class="step"><small><i data-icon="user"></i>Applicant</small><strong>Full application</strong><p>Identity + finances</p></div>
+        <div class="step key"><small><i data-icon="lock"></i>Privacy gateway</small><strong>Hides identity</strong><p>Name, ID, phone, email → <code id="flow-token"></code></p></div>
+        <div class="step ai"><small><i data-icon="chart"></i>Risk model</small><strong>Scores the risk</strong><p>Financial data only</p></div>
+        <div class="step ai"><small><i data-icon="sparkle"></i>LLM</small><strong>Writes the explanation</strong><p>Code + decision + reasons</p></div>
+        <div class="step"><small><i data-icon="user"></i>Applicant</small><strong>Explanation</strong><p>First name added back at the end</p></div>
+      </div>
+      <p class="small muted" style="margin-top:16px">All steps run on the same IBM LinuxONE server. No data is sent to outside AI services.</p>
+    </section>
+
+    <div class="row mb">
+      <section class="card col reveal">
+        <div class="card-head" style="margin-bottom:4px">
+          <div class="card-title"><span class="tile-icon"><i data-icon="db"></i></span><h2>The application</h2></div>
+        </div>
+        <p class="sub">Identity stored encrypted on the server, linked only by the code.</p>
+        <div class="table-wrap"><table>
+          <thead><tr><th scope="col">Field</th><th scope="col">Value</th><th scope="col">Sent to AI?</th></tr></thead>
+          <tbody id="fields-table"></tbody>
+        </table></div>
+      </section>
+
+      <section class="card col stack reveal" style="gap:16px">
+        <div>
+          <div class="card-title"><span class="tile-icon info"><i data-icon="chart"></i></span><h2>What the risk model received</h2></div>
+          <p class="sub" style="margin-bottom:0">No name, no ID, no phone, no email, no sex.</p>
+        </div>
+        <pre class="code" id="model-input"></pre>
+        <div class="success" id="scan"></div>
+      </section>
+    </div>
+
+    <section class="card mb reveal">
+      <div class="card-head">
+        <div class="card-title"><span class="tile-icon info"><i data-icon="sparkle"></i></span><h2>Prompt sent to the LLM</h2></div>
+        <span class="chip chip-teal" id="prompt-chip"></span>
+      </div>
+      <pre class="code" id="prompt"></pre>
+      <p class="small muted" style="margin-top:14px" id="prompt-note"></p>
+    </section>
+
+    <section class="card reveal">
+      <div class="card-head" style="margin-bottom:4px">
+        <div class="card-title"><span class="tile-icon"><i data-icon="list"></i></span><h2>Audit log</h2></div>
+      </div>
+      <p class="sub">Every step is recorded, for regulators and for appeals. Times in your time zone.</p>
+      <div class="table-wrap"><table style="min-width:640px">
+        <thead><tr><th scope="col">Time</th><th scope="col">Step</th><th scope="col">Component</th><th scope="col">Details</th></tr></thead>
+        <tbody id="audit"></tbody>
+      </table></div>
+    </section>
+  </div>
+</main>
+
+<script src="assets/js/config.js?v=2"></script>
+<script src="assets/js/mock.js?v=2"></script>
+<script src="assets/js/api.js?v=2"></script>
+<script src="assets/js/common.js?v=2"></script>
+<script src="assets/js/privacy.js?v=2"></script>
+</body>
+</html>
