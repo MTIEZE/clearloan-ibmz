@@ -56,7 +56,7 @@ python -m pytest backend/tests                    # back-end tests (pip install 
 ```
 *.html        the 6 pages (at the repo root: the Flask back-end serves them from here, see ROOT in backend/config.py)
 assets/       css/style.css, js/ (api.js = every API call, config.js, mock.js = offline mode)
-backend/      Flask app, privacy gateway, risk model, LLM explanations, fairness, tests
+backend/      Flask app, privacy gateway, risk model, Template-based explanations, fairness, tests
 models/       trained model files (ML)
 notebooks/    training and fairness notebooks (ML & Fairness)
 instance/     created on first run: SQLite database + keys. Git-ignored, never commit it
