@@ -102,6 +102,8 @@ python -m backend
 
 If the model is slow or returns bad output, the back-end falls back to the templates and says so in the audit log.
 
+**Use Google Gemini** (tried first when configured): put the API key in `instance/gemini_api_key` (git-ignored, never commit it) and optionally set `CLEARLOAN_GEMINI_MODEL`. Gemini is an outside cloud service: it receives the pseudonymous prompt only (code, decision, reasons), never the name, ID, phone or email. If the server cannot reach Google, each decision waits up to `CLEARLOAN_LLM_TIMEOUT` seconds (25) before the templates are used: for a demo on a network that blocks it, remove the key file or set `CLEARLOAN_LLM_TIMEOUT=3`.
+
 **Settings** (environment variables): `CLEARLOAN_SECRET_KEY`, `CLEARLOAN_DATA_KEY` (Fernet key), `CLEARLOAN_DB`, `CLEARLOAN_SESSION_MINUTES` (15), `CLEARLOAN_LOCK_AFTER` (5), `CLEARLOAN_LOCK_MINUTES` (10), `CLEARLOAN_APPROVAL_LIMIT` (50), `CLEARLOAN_COOKIE_SECURE=1` behind HTTPS, `CLEARLOAN_OLLAMA_URL`, `CLEARLOAN_GRANITE_MODEL`, `CLEARLOAN_HOST`, `CLEARLOAN_PORT`.
 
 For production, run behind a WSGI server and HTTPS, for example `gunicorn "backend.app:create_app()"` on LinuxONE, set `CLEARLOAN_COOKIE_SECURE=1`, and replace the demo accounts.

@@ -130,7 +130,8 @@
     }));
   }
   renderExplanation('local');
-  $('engine-note').innerHTML = `Written by ${esc(r.llm.engine || 'IBM Granite')} on our LinuxONE server. The AI only saw the code <code>${esc(r.token)}</code>; your name was added back at the end by the privacy gateway. <a href="privacy.html?id=${encodeURIComponent(r.application_id)}" style="font-weight:600">See what the AI saw</a>`;
+  const cloud = /gemini/i.test(r.llm.engine || '');
+  $('engine-note').innerHTML = `Written by ${esc(r.llm.engine || 'IBM Granite')}${cloud ? ' (Google cloud service)' : ' on our LinuxONE server'}. The AI only saw the code <code>${esc(r.token)}</code>; your name was added back at the end by the privacy gateway. <a href="privacy.html?id=${encodeURIComponent(r.application_id)}" style="font-weight:600">See what the AI saw</a>`;
 
   // ---------- Steps
   if (approved) $('steps-title').textContent = 'Next steps';
