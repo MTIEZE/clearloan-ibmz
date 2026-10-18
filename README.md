@@ -50,6 +50,17 @@ python -m pytest backend/tests                    # back-end tests (pip install 
 ```
 
 **Front-end only (no back-end):** double-click `index.html`, or add `?mock=1` to any page URL. Fake data, same JSON contract. `?mock=0` switches back.
+## Run on IBM LinuxONE
+
+The application has been demonstrated on an IBM LinuxONE VM. To verify the machine architecture, run this command in the VM terminal:
+
+```bash
+uname -m
+```
+
+Expected output on IBM Z / LinuxONE is `s390x`.
+
+Keep private keys (`.pem` files), passwords, API keys, and Jupyter tokens out of the repository.
 
 ## Repository layout
 
