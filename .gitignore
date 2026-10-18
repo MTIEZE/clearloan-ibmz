@@ -248,3 +248,7 @@ jupyter_*config.json
 .DS_Store
 Thumbs.db
 desktop.ini
+
+# Local backup files
+*.backup
+*.before-*

@@ -153,3 +153,59 @@ def test_pii_tools():
     assert pii_scan("Applicant_7F3A was approved for AED 50,000", ident) == []
     assert set(pii_scan("Ahmed, call +971 50 123 4567 or ahmed.khan@example.com", ident)) == {"name", "phone", "email"}
     assert redact("I am Ahmed Khan, 784-1990-1234567-1", ident) == "I am [name] [name], [id number]"
+
+def test_fairness_rates_and_small_group_threshold():
+    from backend.fairness import MIN_GROUP, _rates
+
+    rows = (
+        [{"audit_sex": "male", "decision": "approved"} for _ in range(6)]
+        + [{"audit_sex": "male", "decision": "not_approved"} for _ in range(4)]
+        + [{"audit_sex": "female", "decision": "approved"} for _ in range(3)]
+        + [{"audit_sex": "female", "decision": "not_approved"} for _ in range(7)]
+    )
+    rates = _rates(rows, "audit_sex", ["male", "female"])
+    assert rates[0]["rate"] == 60
+    assert rates[1]["rate"] == 30
+    assert rates[0]["enough"] and rates[1]["enough"]
+    assert abs(rates[0]["rate"] - rates[1]["rate"]) == 30
+
+    small_rows = [
+        {"audit_sex": "male", "decision": "approved"}
+        for _ in range(MIN_GROUP - 1)
+    ]
+    small_rate = _rates(small_rows, "audit_sex", ["male"])
+    assert small_rate[0]["enough"] is False
+
+
+def test_fairness_age_band_boundaries():
+    from backend.fairness import age_band
+
+    assert [age_band(a) for a in [18, 25, 26, 35, 36, 50, 51]] == [
+        "18 to 25", "18 to 25", "26 to 35", "26 to 35",
+        "36 to 50", "36 to 50", "51 and over",
+    ]
+
+
+def test_live_fairness_uses_original_model_decision(app):
+    from backend.db import get_db
+    from backend.fairness import live
+
+    c = app.test_client()
+    assert login(c)["ok"]
+    response = c.post("/api/apply", json=APPLICATION, headers=H)
+    assert response.status_code == 201
+    app_id = response.get_json()["application_id"]
+
+    with app.app_context():
+        db = get_db()
+        db.execute(
+            "UPDATE applications SET final_decision = 'approved' WHERE id = ?",
+            (app_id,),
+        )
+        db.commit()
+        metrics = live()
+
+    assert metrics["applications"] == 1
+    assert metrics["approval_rate"] == 0
+    men = next(g for g in metrics["groups"]["sex"] if g["label"] == "Men")
+    assert men["rate"] == 0

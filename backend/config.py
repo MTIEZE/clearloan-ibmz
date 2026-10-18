@@ -34,6 +34,8 @@ COOKIE_SECURE = os.environ.get("CLEARLOAN_COOKIE_SECURE", "0") == "1"   # set to
 # Optional local LLM (IBM Granite through Ollama on the same server). Empty = built-in templates.
 OLLAMA_URL = os.environ.get("CLEARLOAN_OLLAMA_URL", "")
 GRANITE_MODEL = os.environ.get("CLEARLOAN_GRANITE_MODEL", "granite3.3:2b")
+GEMINI_MODEL = os.environ.get("CLEARLOAN_GEMINI_MODEL", "gemini-3.8-flash")
+GEMINI_KEY_FILE = INSTANCE / "gemini_api_key"
 LLM_TIMEOUT = float(os.environ.get("CLEARLOAN_LLM_TIMEOUT", 25))
 
 LANGUAGES = ("en", "ar", "ur", "hi", "fr")

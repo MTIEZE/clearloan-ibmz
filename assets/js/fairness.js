@@ -23,7 +23,7 @@
     $('group-title').textContent = group === 'sex' ? 'Approval rate by sex' : 'Approval rate by age band';
     $('group-note').textContent = group === 'sex'
       ? `Gap between men and women: ${m.gap_sex_before} points before, ${m.gap_sex_after} points after.`
-      : `Fairness ratio (lowest group / highest group): ${m.ratio_age_before.toFixed(2)} before, ${m.ratio_age_after.toFixed(2)} after.`;
+      : `Reference fairness ratio (lowest group / highest group): ${m.ratio_age_before.toFixed(2)} before, ${m.ratio_age_after.toFixed(2)} after.`;
     $('groups').innerHTML = d.groups[group].map((g) => `
       <div class="group-row">
         <div style="font-weight:600">${esc(g.label)}</div>
@@ -67,11 +67,11 @@
   const m = d.metrics;
   const passes = m.ratio_age_after >= m.ratio_target;
   $('kpis').innerHTML =
-    kpi('users', 'Approval gap · men vs women', `${m.gap_sex_after} pts`, `${delta(m.gap_sex_before, m.gap_sex_after, true, ' pts')} was ${esc(m.gap_sex_before)} pts before mitigation`) +
+    kpi('users', 'Reference approval gap · men vs women', `${m.gap_sex_after} pts`, `${delta(m.gap_sex_before, m.gap_sex_after, true, ' pts')} was ${esc(m.gap_sex_before)} pts before mitigation`) +
     kpi('scale', 'Fairness ratio · age groups', m.ratio_age_after.toFixed(2), `${delta(m.ratio_age_before, m.ratio_age_after, false)} target ${esc(m.ratio_target.toFixed(2))} or more`,
       `<span class="chip ${passes ? 'chip-teal' : 'chip-orange'}">${CL.ico(passes ? 'check' : 'alert')}${passes ? 'Passes' : 'Below target'}</span>`) +
-    kpi('chart', 'Accuracy (AUC)', m.auc_after.toFixed(2), `${delta(m.auc_before, m.auc_after, false)} small cost for fairness`) +
-    kpi('clock', 'Decision time on LinuxONE', `${m.latency_ms} ms`, `average over ${esc(CL.fmt(m.latency_samples))} test applications`);
+    kpi('chart', 'Reference AUC (unvalidated)', m.auc_after.toFixed(2), `${delta(m.auc_before, m.auc_after, false)} small cost for fairness`) +
+    kpi('clock', 'Reference latency (unvalidated)', `${m.latency_ms} ms`, `average over ${esc(CL.fmt(m.latency_samples))} test applications`);
 
   let group = 'sex';
   renderGroups(d, group);

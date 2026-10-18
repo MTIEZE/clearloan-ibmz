@@ -62,7 +62,7 @@ notebooks/    training and fairness notebooks (ML & Fairness)
 instance/     created on first run: SQLite database + keys. Git-ignored, never commit it
 ```
 
-`backend/model.py` and `backend/data/fairness_report.json` are placeholders until the ML and Fairness work replaces them. Never commit the LinuxONE `.pem` key or the Jupyter token.
+`backend/model.py` contains the app's explainable rule-based risk scorecard; it is not the separately trained Jupyter baseline model. `backend/data/fairness_report.json` contains reference training results that have not been independently validated against the model currently used by the app. Do not present these reference metrics as validated performance. Never commit the LinuxONE `.pem` key or the Jupyter token.
 
 ## Pages
 
@@ -85,7 +85,7 @@ Light and dark themes (follows the system, toggle in the header), keyboard and s
 | `security.py` | Password hashing (scrypt), lockout (5 tries → 10 min), TOTP two-factor for staff, 15-min sessions, role checks |
 | `gateway.py` | Privacy gateway: identity encrypted with Fernet (AES), replaced by a token, masked, PII scan of every prompt, redaction of free text for staff |
 | `model.py` | Explainable risk scorecard (two variants: full history / first-time borrower), exact per-feature contributions, counterfactuals ("up to AED X would be approved") |
-| `llm.py` | Explanations and steps in English, Arabic, Urdu, Hindi and French. Uses IBM Granite through Ollama when configured, built-in templates otherwise |
+| `llm.py` | Explanations and steps in English, Arabic, Urdu, Hindi and French. Tries Google Gemini first, optionally IBM Granite through Ollama, then built-in templates |
 | `fairness.py` | Offline report (`data/fairness_report.json`) + live approval rates by sex and age band |
 | `service.py` | The pipeline: web app → gateway → model → LLM → gateway, and the JSON read models |
 | `db.py` | SQLite schema, audit log |

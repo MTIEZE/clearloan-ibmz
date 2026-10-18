@@ -88,8 +88,13 @@ def create_app(test_config: dict | None = None) -> Flask:
 
     @app.get("/api/health")
     def health():
-        return jsonify(ok=True, model=model.VERSION,
-                       llm=f"IBM Granite via Ollama ({config.GRANITE_MODEL})" if config.OLLAMA_URL else "templates")
+        if config.GEMINI_KEY_FILE.is_file() and config.GEMINI_KEY_FILE.read_text(encoding="utf-8").strip():
+            llm_status = f"Google Gemini ({config.GEMINI_MODEL}) configured"
+        elif config.OLLAMA_URL:
+            llm_status = f"IBM Granite via Ollama ({config.GRANITE_MODEL})"
+        else:
+            llm_status = "templates"
+        return jsonify(ok=True, model=model.VERSION, llm=llm_status)
 
     @app.post("/api/register")
     def register():

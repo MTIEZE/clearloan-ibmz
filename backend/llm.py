@@ -49,6 +49,46 @@ def _ollama(prompt: str) -> dict | None:
     return None
 
 
+def _gemini(prompt: str) -> dict | None:
+    """Generate an explanation with Gemini; never log or expose the API key."""
+    key_path = config.GEMINI_KEY_FILE
+    if not key_path.is_file():
+        return None
+    try:
+        key = key_path.read_text(encoding="utf-8").strip()
+        if not key:
+            return None
+        url = (
+            "https://generativelanguage.googleapis.com/v1beta/models/"
+            + config.GEMINI_MODEL + ":generateContent"
+        )
+        body = json.dumps({
+            "contents": [{"parts": [{"text": prompt}]}],
+            "generationConfig": {"temperature": 0.2, "responseMimeType": "application/json"}
+        }).encode("utf-8")
+        req = urllib.request.Request(
+            url, data=body,
+            headers={"Content-Type": "application/json", "x-goog-api-key": key},
+            method="POST"
+        )
+        with urllib.request.urlopen(req, timeout=config.LLM_TIMEOUT) as res:
+            data = json.loads(res.read().decode("utf-8"))
+        text = data["candidates"][0]["content"]["parts"][0]["text"].strip()
+        if text.startswith("```"):
+            text = text.split("\n", 1)[1].rsplit("```", 1)[0].strip()
+        out = json.loads(text)
+        steps = out.get("steps", [])
+        explanation = out.get("explanation")
+        if isinstance(explanation, str) and explanation.strip() and isinstance(steps, list) and len(steps) >= 3:
+            clean_steps = [str(step).strip() for step in steps[:3]]
+            if all(clean_steps):
+                return {"explanation": explanation.strip(), "steps": clean_steps}
+    except Exception:
+        # Do not log secrets or provider response bodies; use safe fallback.
+        return None
+    return None
+
+
 # ---------- Templates (one entry per language)
 
 T = {
@@ -226,8 +266,13 @@ def appeal_draft(app_id: str, first_name: str) -> str:
 
 def explain(token: str, result: dict, f: dict, cf: dict, language: str, prompt: str) -> dict:
     """Explanation + steps, written with the token only. The gateway puts the first name back later."""
-    out = _ollama(prompt) if config.OLLAMA_URL else None
-    engine = f"IBM Granite ({config.GRANITE_MODEL})" if out else "ClearLoan explainer (templates)"
+    out = _gemini(prompt)
+    engine = f"Google Gemini ({config.GEMINI_MODEL})" if out else ""
+    if not out and config.OLLAMA_URL:
+        out = _ollama(prompt)
+        engine = f"IBM Granite ({config.GRANITE_MODEL})" if out else ""
+    if not out:
+        engine = "ClearLoan explainer (templates)"
     if not out:
         out = {"explanation": template_explanation(language, token, result, f),
                "steps": template_steps(language, result, f, cf)}
